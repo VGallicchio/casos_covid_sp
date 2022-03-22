@@ -1,0 +1,9 @@
+{
+	"name": "adf-studyvitor",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "703e7d9f-bb3b-4c81-bd2e-5b51a8d768a9",
+		"tenantId": "cfc4715a-a5c3-4252-b1e7-11e80d2102ea"
+	}
+}
