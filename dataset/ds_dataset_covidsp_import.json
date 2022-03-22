@@ -8,10 +8,10 @@
 		"parameters": {
 			"relativeURL": {
 				"type": "string"
+			},
+			"sourceBaseURL": {
+				"type": "string"
 			}
-		},
-		"folder": {
-			"name": "covid_sp"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
