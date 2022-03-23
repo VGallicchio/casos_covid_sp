@@ -17,6 +17,9 @@
 			},
 			"sourceBaseURL": {
 				"type": "string"
+			},
+			"Delimiter": {
+				"type": "string"
 			}
 		},
 		"folder": {
@@ -32,8 +35,10 @@
 					"type": "Expression"
 				}
 			},
-			"columnDelimiter": ",",
-			"encodingName": "UTF-8 without BOM",
+			"columnDelimiter": {
+				"value": "@dataset().Delimiter",
+				"type": "Expression"
+			},
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
