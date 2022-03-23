@@ -20,7 +20,7 @@
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"MunicpiosIBGE": {
-								"FileName": "Dados-covid-19-estado.csv",
+								"FileName": "Dados-covid-19-municipios.csv",
 								"Delimiter": ";"
 							},
 							"SinkToDatabase": {
