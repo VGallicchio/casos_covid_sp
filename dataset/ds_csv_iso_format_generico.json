@@ -1,9 +1,17 @@
 {
-	"name": "ds_teste",
+	"name": "ds_csv_iso_format_generico",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_datalake",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FileName": {
+				"type": "string"
+			},
+			"Delimiter": {
+				"type": "string"
+			}
 		},
 		"folder": {
 			"name": "covid_sp"
@@ -13,11 +21,17 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Dados-covid-19-municipios.csv",
+				"fileName": {
+					"value": "@dataset().FileName",
+					"type": "Expression"
+				},
 				"folderPath": "covid-sp",
 				"fileSystem": "raw"
 			},
-			"columnDelimiter": ";",
+			"columnDelimiter": {
+				"value": "@dataset().Delimiter",
+				"type": "Expression"
+			},
 			"encodingName": "ISO-8859-1",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
