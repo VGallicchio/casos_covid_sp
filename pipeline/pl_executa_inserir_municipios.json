@@ -1,0 +1,45 @@
+{
+	"name": "pl_executa_inserir_municipios",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data flow insere municipios",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_municipios_ibge_sink_table",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"MunicpiosIBGE": {
+								"FileName": "Dados-covid-19-estado.csv",
+								"Delimiter": ";"
+							},
+							"SinkToDatabase": {
+								"SchemaName": "dbo",
+								"TableName": "Municipios"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "covid-sp/Execute DataFlow"
+		},
+		"annotations": []
+	}
+}

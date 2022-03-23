@@ -1,6 +1,9 @@
 {
 	"name": "df_municipios_ibge_sink_table",
 	"properties": {
+		"folder": {
+			"name": "covid_sp"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
@@ -14,12 +17,19 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "ds_generico_azuresql",
+						"type": "DatasetReference"
+					},
 					"name": "SinkToDatabase"
 				}
 			],
 			"transformations": [
 				{
 					"name": "SelectColunas"
+				},
+				{
+					"name": "FiltraIgnorado"
 				}
 			],
 			"scriptLines": [
@@ -44,10 +54,18 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectColunas",
-				"SelectColunas sink(allowSchemaDrift: true,",
+				"SelectColunas filter(Municipio != 'Ignorado' && not(isNull(Cod_IBGE))) ~> FiltraIgnorado",
+				"FiltraIgnorado sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     preSQLs:['TRUNCATE TABLE dbo.Municipios;'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SinkToDatabase"
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> SinkToDatabase"
 			]
 		}
 	}

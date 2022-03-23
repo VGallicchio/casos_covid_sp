@@ -1,0 +1,28 @@
+{
+	"name": "df_total_casoseobitospordia_sp",
+	"properties": {
+		"description": "Total de casos e óbitos por dia no estado de SP.",
+		"folder": {
+			"name": "covid_sp"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_csv_iso_format_generico",
+						"type": "DatasetReference"
+					},
+					"name": "CasosPorDia"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> CasosPorDia"
+			]
+		}
+	}
+}
