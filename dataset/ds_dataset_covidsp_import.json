@@ -33,7 +33,7 @@
 				}
 			},
 			"columnDelimiter": ",",
-			"encodingName": "ISO-8859-1",
+			"encodingName": "UTF-8 without BOM",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
