@@ -33,6 +33,7 @@
 				"value": "@dataset().Delimiter",
 				"type": "Expression"
 			},
+			"encodingName": "ISO-8859-1",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
