@@ -3,11 +3,24 @@
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
-			"sources": [],
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_coviddatasets_csv",
+						"type": "DatasetReference"
+					},
+					"name": "MunicpiosIBGE"
+				}
+			],
 			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
-				""
+				"source(output(",
+				"          {Data;Total de casos;Casos por dia;�bitos por dia;;;;;} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> MunicpiosIBGE"
 			]
 		}
 	}

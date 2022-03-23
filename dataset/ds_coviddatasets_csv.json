@@ -8,6 +8,9 @@
 		"parameters": {
 			"FileName": {
 				"type": "string"
+			},
+			"Delimiter": {
+				"type": "string"
 			}
 		},
 		"folder": {
@@ -26,6 +29,10 @@
 				"fileSystem": "raw"
 			},
 			"columnDelimiter": ",",
+			"rowDelimiter": {
+				"value": "@dataset().Delimiter",
+				"type": "Expression"
+			},
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
