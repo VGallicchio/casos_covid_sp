@@ -17,11 +17,28 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "SelectColunas"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          Data as date 'dd/MM/yyyy',",
+				"          {Total de casos} as integer,",
+				"          {Casos por dia} as integer,",
+				"          {Óbitos por dia} as integer,",
+				"          {_c4} as string,",
+				"          {_c5} as string,",
+				"          {_c6} as string,",
+				"          {_c7} as string,",
+				"          {_c8} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> CasosPorDia"
+				"     ignoreNoFilesFound: false) ~> CasosPorDia",
+				"CasosPorDia select(skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectColunas"
 			]
 		}
 	}
