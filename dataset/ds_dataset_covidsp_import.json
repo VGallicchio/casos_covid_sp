@@ -19,6 +19,9 @@
 				"type": "string"
 			}
 		},
+		"folder": {
+			"name": "covid_sp"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
