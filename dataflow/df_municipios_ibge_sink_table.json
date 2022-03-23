@@ -12,12 +12,42 @@
 					"name": "MunicpiosIBGE"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"name": "SinkToDatabase"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectColunas"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          Cod_IBGE as integer,",
+				"          {Grande região} as string,",
+				"          {Município} as string,",
+				"          {Mun_Total de casos} as integer,",
+				"          {Mun_Total de óbitos} as integer,",
+				"          {_c5} as string,",
+				"          {_c6} as string,",
+				"          {_c7} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> MunicpiosIBGE"
+				"     ignoreNoFilesFound: false) ~> MunicpiosIBGE",
+				"MunicpiosIBGE select(mapColumn(",
+				"          Cod_IBGE,",
+				"          Municipio = {Município},",
+				"          Total_De_Casos = {Mun_Total de casos},",
+				"          Total_De_Obitos = {Mun_Total de óbitos}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectColunas",
+				"SelectColunas sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SinkToDatabase"
 			]
 		}
 	}
