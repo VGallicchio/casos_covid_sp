@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ds_coviddatasets_csv",
+						"referenceName": "ds_csv_iso_format_generico",
 						"type": "DatasetReference"
 					},
 					"name": "MunicpiosIBGE"
@@ -15,10 +15,7 @@
 			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
-				"source(output(",
-				"          {Data;Total de casos;Casos por dia;�bitos por dia;;;;;} as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> MunicpiosIBGE"
 			]
