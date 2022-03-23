@@ -125,7 +125,7 @@
 											"value": "@item().sinkFileName",
 											"type": "Expression"
 										},
-										"Delimiter": "*"
+										"Delimiter": ";"
 									}
 								}
 							]
