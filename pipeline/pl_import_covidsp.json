@@ -111,7 +111,8 @@
 										"sourceBaseURL": {
 											"value": "@item().sourceBaseURL",
 											"type": "Expression"
-										}
+										},
+										"Delimiter": ";"
 									}
 								}
 							],
