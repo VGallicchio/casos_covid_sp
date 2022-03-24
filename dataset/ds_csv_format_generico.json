@@ -1,0 +1,41 @@
+{
+	"name": "ds_csv_format_generico",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_datalake",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FileName": {
+				"type": "string"
+			},
+			"Delimiter": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "covid_sp"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().FileName",
+					"type": "Expression"
+				},
+				"folderPath": "covid-sp",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": {
+				"value": "@dataset().Delimiter",
+				"type": "Expression"
+			},
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

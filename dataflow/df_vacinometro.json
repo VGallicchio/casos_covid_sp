@@ -1,0 +1,27 @@
+{
+	"name": "df_vacinometro",
+	"properties": {
+		"folder": {
+			"name": "covid_sp"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_generico_csv",
+						"type": "DatasetReference"
+					},
+					"name": "Vacinometro"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Vacinometro"
+			]
+		}
+	}
+}
