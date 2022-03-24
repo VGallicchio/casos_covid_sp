@@ -9,18 +9,67 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ds_generico_csv",
+						"referenceName": "ds_csv_format_generico",
 						"type": "DatasetReference"
 					},
 					"name": "Vacinometro"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_csv_iso_format_generico",
+						"type": "DatasetReference"
+					},
+					"name": "MunicipiosCodigo"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "OrgMunicipios"
+				},
+				{
+					"name": "CodMunicipio"
+				},
+				{
+					"name": "SortMunicipio"
+				},
+				{
+					"name": "join1"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          {Município} as string,",
+				"          Dose as string,",
+				"          {Total Doses Aplicadas} as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> Vacinometro"
+				"     ignoreNoFilesFound: false) ~> Vacinometro",
+				"source(output(",
+				"          Cod_IBGE as integer,",
+				"          {Grande região} as string,",
+				"          {Município} as string,",
+				"          {Mun_Total de casos} as integer,",
+				"          {Mun_Total de óbitos} as integer,",
+				"          {_c5} as string,",
+				"          {_c6} as string,",
+				"          {_c7} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> MunicipiosCodigo",
+				"Vacinometro sort(asc({Município}, true)) ~> OrgMunicipios",
+				"MunicipiosCodigo select(mapColumn(",
+				"          Cod_IBGE,",
+				"          Municipio_2 = {Município}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> CodMunicipio",
+				"CodMunicipio sort(asc(Municipio_2, true)) ~> SortMunicipio",
+				"SortMunicipio, OrgMunicipios join(Municipio_2 == {Município},",
+				"     joinType:'right',",
+				"     broadcast: 'auto')~> join1"
 			]
 		}
 	}

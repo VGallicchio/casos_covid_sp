@@ -1,0 +1,105 @@
+{
+	"name": "df_movies_link_genres",
+	"properties": {
+		"folder": {
+			"name": "ECDC_FLow"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "Movies"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_generico_azuresql",
+						"type": "DatasetReference"
+					},
+					"name": "GenresTable"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_generico_azuresql",
+						"type": "DatasetReference"
+					},
+					"name": "SinkToGenresLink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SplitGenres"
+				},
+				{
+					"name": "FlattGenres"
+				},
+				{
+					"name": "SelectGenres"
+				},
+				{
+					"name": "JoinGenresID"
+				},
+				{
+					"name": "SelectLinked"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          movieId as integer,",
+				"          title as string,",
+				"          genres as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false) ~> Movies",
+				"source(output(",
+				"          ID as integer,",
+				"          GENRES as string,",
+				"          COUNT as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> GenresTable",
+				"Movies derive(genres_2 = split(genres, '|')) ~> SplitGenres",
+				"SplitGenres foldDown(unroll(genres_2),",
+				"     mapColumn(",
+				"          movieId,",
+				"          title,",
+				"          genres_2",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> FlattGenres",
+				"GenresTable select(mapColumn(",
+				"          ID,",
+				"          GENRES",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectGenres",
+				"FlattGenres, SelectGenres join(genres_2 == GENRES,",
+				"     joinType:'inner',",
+				"     broadcast: 'auto')~> JoinGenresID",
+				"JoinGenresID select(mapColumn(",
+				"          MOVIE_ID = movieId,",
+				"          GENRE_ID = ID",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectLinked",
+				"SelectLinked sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          MOVIE_ID,",
+				"          GENRE_ID",
+				"     )) ~> SinkToGenresLink"
+			]
+		}
+	}
+}
