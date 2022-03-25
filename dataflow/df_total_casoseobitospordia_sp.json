@@ -20,14 +20,17 @@
 			"transformations": [
 				{
 					"name": "SelectColunas"
+				},
+				{
+					"name": "FiltroCasos"
 				}
 			],
 			"scriptLines": [
 				"source(output(",
-				"          Data as date 'dd/MM/yyyy',",
+				"          Data as string,",
 				"          {Total de casos} as integer,",
 				"          {Casos por dia} as integer,",
-				"          {Óbitos por dia} as integer,",
+				"          {Óbitos por dia} as short,",
 				"          {_c4} as string,",
 				"          {_c5} as string,",
 				"          {_c6} as string,",
@@ -37,8 +40,15 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> CasosPorDia",
-				"CasosPorDia select(skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectColunas"
+				"CasosPorDia select(mapColumn(",
+				"          Data,",
+				"          Total_de_casos = {Total de casos},",
+				"          Casos_por_dia = {Casos por dia},",
+				"          Obitos_por_dia = {Óbitos por dia}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectColunas",
+				"SelectColunas filter(Casos_por_dia > 0 || Obitos_por_dia > 0) ~> FiltroCasos"
 			]
 		}
 	}
