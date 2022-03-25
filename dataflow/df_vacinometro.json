@@ -34,7 +34,7 @@
 					"name": "SortMunicipio"
 				},
 				{
-					"name": "join1"
+					"name": "JoinCodMun"
 				}
 			],
 			"scriptLines": [
@@ -67,9 +67,9 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> CodMunicipio",
 				"CodMunicipio sort(asc(Municipio_2, true)) ~> SortMunicipio",
-				"SortMunicipio, OrgMunicipios join(Municipio_2 == {Município},",
-				"     joinType:'right',",
-				"     broadcast: 'auto')~> join1"
+				"OrgMunicipios, SortMunicipio join({Município} == Municipio_2,",
+				"     joinType:'inner',",
+				"     broadcast: 'auto')~> JoinCodMun"
 			]
 		}
 	}
