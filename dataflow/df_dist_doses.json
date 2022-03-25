@@ -1,0 +1,89 @@
+{
+	"name": "df_dist_doses",
+	"properties": {
+		"folder": {
+			"name": "covid_sp"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_csv_format_generico",
+						"type": "DatasetReference"
+					},
+					"name": "DistDoses"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_csv_format_generico",
+						"type": "DatasetReference"
+					},
+					"name": "Sample"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_generico_azuresql",
+						"type": "DatasetReference"
+					},
+					"name": "SinkQtdDoses"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SortAlfabetico"
+				},
+				{
+					"name": "JoinCodMun"
+				},
+				{
+					"name": "SelColunas"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Municipio as string,",
+				"          {Qtd-Doses-Distribuidas} as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 650,",
+				"     ignoreNoFilesFound: false) ~> DistDoses",
+				"source(output(",
+				"          Cod_IBGE as integer,",
+				"          Municipio as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 650,",
+				"     ignoreNoFilesFound: false) ~> Sample",
+				"DistDoses sort(asc(Municipio, true)) ~> SortAlfabetico",
+				"SortAlfabetico, Sample join(DistDoses@Municipio == Sample@Municipio,",
+				"     joinType:'inner',",
+				"     broadcast: 'auto')~> JoinCodMun",
+				"JoinCodMun select(mapColumn(",
+				"          Cod_IBGE,",
+				"          Qtd_Doses_Distribuidas = {Qtd-Doses-Distribuidas}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelColunas",
+				"SelColunas sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Cod_IBGE,",
+				"          Qtd_Doses_Distribuidas",
+				"     )) ~> SinkQtdDoses"
+			]
+		}
+	}
+}
