@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy sample data",
+				"name": "Cria sample de municipios",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -16,15 +16,9 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": false,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "DelimitedTextSink",
@@ -38,20 +32,6 @@
 						}
 					},
 					"enableStaging": false,
-					"enableSkipIncompatibleRow": true,
-					"logSettings": {
-						"enableCopyActivityLog": true,
-						"copyActivityLogSettings": {
-							"logLevel": "Warning",
-							"enableReliableLogging": false
-						},
-						"logLocationSettings": {
-							"linkedServiceName": {
-								"referenceName": "ls_datalake",
-								"type": "LinkedServiceReference"
-							}
-						}
-					},
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
@@ -59,7 +39,7 @@
 								"source": {
 									"name": "Cod_IBGE",
 									"type": "Int32",
-									"physicalType": "String"
+									"physicalType": "int"
 								},
 								"sink": {
 									"name": "Cod_IBGE",
@@ -69,12 +49,12 @@
 							},
 							{
 								"source": {
-									"name": "Município",
+									"name": "Municipio",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "varchar"
 								},
 								"sink": {
-									"name": "Município",
+									"name": "Municipio",
 									"type": "String",
 									"physicalType": "String"
 								}
@@ -89,20 +69,21 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_csv_iso_format_generico",
+						"referenceName": "ds_generico_azuresql",
 						"type": "DatasetReference",
 						"parameters": {
-							"FileName": "Dados-covid-19-municipios.csv",
-							"Delimiter": ";"
+							"SchemaName": "dbo",
+							"TableName": "Municipios"
 						}
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_csv_iso_format_generico",
+						"referenceName": "ds_generico_csv",
 						"type": "DatasetReference",
 						"parameters": {
-							"FileName": "sample.csv",
+							"ContainerName": "raw/sample",
+							"FileName": "samplefile.csv",
 							"Delimiter": ","
 						}
 					}
