@@ -20,17 +20,16 @@
 						"type": "DatasetReference"
 					},
 					"name": "Sample"
-				}
-			],
-			"sinks": [
+				},
 				{
 					"dataset": {
 						"referenceName": "ds_generico_azuresql",
 						"type": "DatasetReference"
 					},
-					"name": "SinkVacinometro"
+					"name": "DosesDB"
 				}
 			],
+			"sinks": [],
 			"transformations": [
 				{
 					"name": "OrdenaAlfa"
@@ -40,6 +39,12 @@
 				},
 				{
 					"name": "SeleColunas"
+				},
+				{
+					"name": "JoinDosesID"
+				},
+				{
+					"name": "SelColunasSink"
 				}
 			],
 			"scriptLines": [
@@ -60,6 +65,15 @@
 				"     validateSchema: false,",
 				"     limit: 650,",
 				"     ignoreNoFilesFound: false) ~> Sample",
+				"source(output(",
+				"          ID as integer,",
+				"          Dose as string,",
+				"          Total_Doses_Aplicadas as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DosesDB",
 				"Vacinometro sort(asc({Município}, true)) ~> OrdenaAlfa",
 				"OrdenaAlfa, Sample join({Município} == Municipio,",
 				"     joinType:'inner',",
@@ -71,16 +85,16 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SeleColunas",
-				"SeleColunas sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
+				"SeleColunas, DosesDB join(SeleColunas@Dose == DosesDB@Dose,",
+				"     joinType:'inner',",
+				"     broadcast: 'auto')~> JoinDosesID",
+				"JoinDosesID select(mapColumn(",
+				"          Cod_IBGE,",
+				"          Dose = ID,",
+				"          Total_Doses_Aplicadas = SeleColunas@Total_Doses_Aplicadas",
+				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> SinkVacinometro"
+				"     skipDuplicateMapOutputs: true) ~> SelColunasSink"
 			]
 		}
 	}
