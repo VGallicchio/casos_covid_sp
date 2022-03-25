@@ -1,0 +1,37 @@
+{
+	"name": "df_evol_apli_doses",
+	"properties": {
+		"folder": {
+			"name": "covid_sp"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_csv_format_generico",
+						"type": "DatasetReference"
+					},
+					"name": "EvolAppDeDoses"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "OrgPorData"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Dia de Data Registro} as date 'dd/MM/yyyy',",
+				"          Dose as string,",
+				"          {Qtd Doses} as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> EvolAppDeDoses",
+				"EvolAppDeDoses sort(asc({Dia de Data Registro}, true)) ~> OrgPorData"
+			]
+		}
+	}
+}
