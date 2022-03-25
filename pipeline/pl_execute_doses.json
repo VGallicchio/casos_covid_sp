@@ -4,7 +4,7 @@
 		"description": "Executa o Data Flow de doses, assim temos uma tabela normalizada com as doses.",
 		"activities": [
 			{
-				"name": "Data flow1",
+				"name": "Data flow insere Doses",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
