@@ -1,7 +1,7 @@
 {
 	"name": "df_doses",
 	"properties": {
-		"description": "Importa doses para tabela para normalização.",
+		"description": "Importa doses para tabela para normalização, utiliza evolucao_aplicacao_doses.csv.",
 		"folder": {
 			"name": "covid_sp"
 		},
