@@ -1,10 +1,10 @@
 {
-	"name": "pl_executa_inserir_municipios",
+	"name": "pl_execute_doses",
 	"properties": {
-		"description": "Executa o Data Flow para Inserir os municipios com os codigos do IBGE sendo seus denominadores unicos, para normalização.",
+		"description": "Executa o Data Flow de doses, assim temos uma tabela normalizada com as doses.",
 		"activities": [
 			{
-				"name": "Data flow insere municipios",
+				"name": "Data flow1",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -17,16 +17,16 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_municipios_ibge_sink_table",
+						"referenceName": "df_doses",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"MunicpiosIBGE": {
-								"FileName": "Dados-covid-19-municipios.csv",
+							"Doses": {
+								"FileName": "evolucao_aplicacao_doses.csv",
 								"Delimiter": ";"
 							},
-							"SinkToDatabase": {
+							"SinkDoses": {
 								"SchemaName": "dbo",
-								"TableName": "Municipios"
+								"TableName": "Doses"
 							}
 						}
 					},
