@@ -39,6 +39,19 @@
 					},
 					"enableStaging": false,
 					"enableSkipIncompatibleRow": true,
+					"logSettings": {
+						"enableCopyActivityLog": true,
+						"copyActivityLogSettings": {
+							"logLevel": "Warning",
+							"enableReliableLogging": false
+						},
+						"logLocationSettings": {
+							"linkedServiceName": {
+								"referenceName": "ls_datalake",
+								"type": "LinkedServiceReference"
+							}
+						}
+					},
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
@@ -90,7 +103,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"FileName": "sample.csv",
-							"Delimiter": ";"
+							"Delimiter": ","
 						}
 					}
 				]
