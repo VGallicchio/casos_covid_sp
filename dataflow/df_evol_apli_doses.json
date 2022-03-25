@@ -13,12 +13,25 @@
 						"type": "DatasetReference"
 					},
 					"name": "EvolAppDeDoses"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_generico_azuresql",
+						"type": "DatasetReference"
+					},
+					"name": "DosesDB"
 				}
 			],
 			"sinks": [],
 			"transformations": [
 				{
 					"name": "OrgPorData"
+				},
+				{
+					"name": "JoinDosesID"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -30,7 +43,26 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> EvolAppDeDoses",
-				"EvolAppDeDoses sort(asc({Dia de Data Registro}, true)) ~> OrgPorData"
+				"source(output(",
+				"          ID as integer,",
+				"          Dose as string,",
+				"          Total_Doses_Aplicadas as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DosesDB",
+				"EvolAppDeDoses sort(asc({Dia de Data Registro}, true)) ~> OrgPorData",
+				"OrgPorData, DosesDB join(EvolAppDeDoses@Dose == DosesDB@Dose,",
+				"     joinType:'inner',",
+				"     broadcast: 'auto')~> JoinDosesID",
+				"JoinDosesID select(mapColumn(",
+				"          {Dia de Data Registro},",
+				"          Dose = ID,",
+				"          Qtd_Doses_Aplicadas = {Qtd Doses}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
