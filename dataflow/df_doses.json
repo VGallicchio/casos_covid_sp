@@ -1,0 +1,66 @@
+{
+	"name": "df_doses",
+	"properties": {
+		"description": "Importa doses para tabela para normalização.",
+		"folder": {
+			"name": "covid_sp"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_csv_format_generico",
+						"type": "DatasetReference"
+					},
+					"name": "Doses"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_generico_azuresql",
+						"type": "DatasetReference"
+					},
+					"name": "SinkDoses"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SeleDoses"
+				},
+				{
+					"name": "AggDoses"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Dia de Data Registro} as string,",
+				"          Dose as string,",
+				"          {Qtd Doses} as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Doses",
+				"Doses select(mapColumn(",
+				"          Dose,",
+				"          {Qtd Doses}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SeleDoses",
+				"SeleDoses aggregate(groupBy(Dose),",
+				"     Total_Doses_Aplicadas = sum({Qtd Doses})) ~> AggDoses",
+				"AggDoses sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> SinkDoses"
+			]
+		}
+	}
+}
