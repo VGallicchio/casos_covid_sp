@@ -1,0 +1,72 @@
+{
+	"name": "df_evolucao_aplicacao_doses",
+	"properties": {
+		"description": "Evolução das doses aplicadas.\nevolucao_aplicacao_doses.csv.",
+		"folder": {
+			"name": "covid_sp"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_csv_format_generico",
+						"type": "DatasetReference"
+					},
+					"name": "EvolucaoDoses"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_generico_azuresql",
+						"type": "DatasetReference"
+					},
+					"name": "DosesDB"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "JoinDoseID"
+				},
+				{
+					"name": "SelColunas"
+				},
+				{
+					"name": "SortDate"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Dia de Data Registro} as date 'dd/MM/yyyy',",
+				"          Dose as string,",
+				"          {Qtd Doses} as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 650,",
+				"     ignoreNoFilesFound: false) ~> EvolucaoDoses",
+				"source(output(",
+				"          ID as integer,",
+				"          Dose as string,",
+				"          Total_Doses_Aplicadas as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 100,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DosesDB",
+				"EvolucaoDoses, DosesDB join(EvolucaoDoses@Dose == DosesDB@Dose,",
+				"     joinType:'inner',",
+				"     broadcast: 'auto')~> JoinDoseID",
+				"JoinDoseID select(mapColumn(",
+				"          Data_Registro = {Dia de Data Registro},",
+				"          ID,",
+				"          Qtd_Doses = {Qtd Doses}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelColunas",
+				"SelColunas sort(asc(Data_Registro, true)) ~> SortDate"
+			]
+		}
+	}
+}
