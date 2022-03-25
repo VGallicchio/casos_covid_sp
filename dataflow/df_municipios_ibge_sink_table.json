@@ -1,6 +1,7 @@
 {
 	"name": "df_municipios_ibge_sink_table",
 	"properties": {
+		"description": "Municios com total de casos e óbitos.\nCod_IBGA,  Dados-covid-19-municipios.csv",
 		"folder": {
 			"name": "covid_sp"
 		},

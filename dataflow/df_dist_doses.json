@@ -1,6 +1,7 @@
 {
 	"name": "df_dist_doses",
 	"properties": {
+		"description": "Painel de distribuição de doses, painel_distribuicao_doses feito.csv.",
 		"folder": {
 			"name": "covid_sp"
 		},

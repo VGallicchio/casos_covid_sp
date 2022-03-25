@@ -1,7 +1,7 @@
 {
 	"name": "df_total_casoseobitospordia_sp",
 	"properties": {
-		"description": "Total de casos e óbitos por dia no estado de SP.",
+		"description": "Total de casos e óbitos por dia no estado de SP, Dados-covid-19-estado.csv",
 		"folder": {
 			"name": "covid_sp"
 		},
