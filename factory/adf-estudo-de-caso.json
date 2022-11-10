@@ -1,0 +1,9 @@
+{
+	"name": "adf-estudo-de-caso",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "7ee61c7b-24ea-434c-a7db-940f58c8c13d",
+		"tenantId": "95e000c0-b313-454c-8961-5da281059562"
+	}
+}
