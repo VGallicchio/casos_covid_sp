@@ -25,7 +25,7 @@
 							"type": "DelimitedTextReadSettings",
 							"compressionProperties": {
 								"type": "ZipDeflateReadSettings",
-								"preserveZipFileNameAsFolder": false
+								"preserveZipFileNameAsFolder": true
 							}
 						}
 					},
@@ -38,7 +38,7 @@
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
 							"quoteAllText": true,
-							"fileExtension": ".txt"
+							"fileExtension": ".csv"
 						}
 					},
 					"enableStaging": false,
@@ -62,12 +62,8 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "sink_test",
-						"type": "DatasetReference",
-						"parameters": {
-							"path": "microdados",
-							"fileName": "microdados.csv"
-						}
+						"referenceName": "sink_zipped",
+						"type": "DatasetReference"
 					}
 				]
 			}
