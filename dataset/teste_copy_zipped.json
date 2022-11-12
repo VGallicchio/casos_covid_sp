@@ -5,11 +5,6 @@
 			"referenceName": "ls_estudo_de_caso_lake",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"a": {
-				"type": "string"
-			}
-		},
 		"folder": {
 			"name": "testes_dataset"
 		},
