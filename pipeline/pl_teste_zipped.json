@@ -16,16 +16,15 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "DelimitedTextSource",
+						"type": "BinarySource",
 						"storeSettings": {
 							"type": "HttpReadSettings",
 							"requestMethod": "GET"
 						},
 						"formatSettings": {
-							"type": "DelimitedTextReadSettings",
+							"type": "BinaryReadSettings",
 							"compressionProperties": {
-								"type": "ZipDeflateReadSettings",
-								"preserveZipFileNameAsFolder": true
+								"type": "ZipDeflateReadSettings"
 							}
 						}
 					},
@@ -41,19 +40,11 @@
 							"fileExtension": ".csv"
 						}
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
+					"enableStaging": false
 				},
 				"inputs": [
 					{
-						"referenceName": "teste_zipped",
+						"referenceName": "teste_copy_zip_bin",
 						"type": "DatasetReference",
 						"parameters": {
 							"url": "https://www.saopaulo.sp.gov.br/wp-content/uploads/2022/11/20221112_Casos_e_obitos_ESP.zip"
