@@ -1,0 +1,22 @@
+{
+	"name": "dataset3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_estudo_de_caso_lake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "unziped",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
