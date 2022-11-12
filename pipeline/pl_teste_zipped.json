@@ -53,7 +53,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "sink_zipped",
+						"referenceName": "teste_zipped",
 						"type": "DatasetReference"
 					}
 				]
