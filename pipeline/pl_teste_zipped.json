@@ -1,0 +1,58 @@
+{
+	"name": "pl_teste_zipped",
+	"properties": {
+		"activities": [
+			{
+				"name": "copy zipped",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "import_zipped_bin",
+						"type": "DatasetReference",
+						"parameters": {
+							"url": "https://www.saopaulo.sp.gov.br/wp-content/uploads/2022/11/20221112_Casos_e_obitos_ESP.zip"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "teste_copy_zipped",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "teste"
+		},
+		"annotations": []
+	}
+}
