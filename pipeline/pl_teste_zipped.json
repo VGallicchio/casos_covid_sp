@@ -29,15 +29,9 @@
 						}
 					},
 					"sink": {
-						"type": "DelimitedTextSink",
+						"type": "BinarySink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings",
-							"copyBehavior": "FlattenHierarchy"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".csv"
+							"type": "AzureBlobFSWriteSettings"
 						}
 					},
 					"enableStaging": false
@@ -53,7 +47,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "teste_zipped",
+						"referenceName": "zipped_sink",
 						"type": "DatasetReference"
 					}
 				]
