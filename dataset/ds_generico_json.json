@@ -2,7 +2,7 @@
 	"name": "ds_generico_json",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_datalake",
+			"referenceName": "ls_estudo_de_caso_lake",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
