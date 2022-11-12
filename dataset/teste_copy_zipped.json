@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "teste",
+				"fileName": "teste.zip",
 				"folderPath": "zip",
 				"fileSystem": "raw"
 			},
