@@ -26,7 +26,8 @@
 				"type": "HttpServerLocation"
 			},
 			"compression": {
-				"type": "ZipDeflate"
+				"type": "ZipDeflate",
+				"level": "Optimal"
 			}
 		}
 	}
