@@ -15,10 +15,6 @@
 				"type": "AzureBlobFSLocation",
 				"folderPath": "zip",
 				"fileSystem": "raw"
-			},
-			"compression": {
-				"type": "ZipDeflate",
-				"level": "Optimal"
 			}
 		}
 	}
