@@ -22,10 +22,8 @@
 				"fileSystem": "raw"
 			},
 			"compression": {
-				"type": {
-					"value": "@dataset().a",
-					"type": "Expression"
-				}
+				"type": "ZipDeflate",
+				"level": "Optimal"
 			}
 		}
 	}
