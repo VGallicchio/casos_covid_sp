@@ -1,0 +1,20 @@
+{
+	"name": "teste_copy_zipped",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_estudo_de_caso_lake",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "testes_dataset"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "raw"
+			}
+		}
+	}
+}
