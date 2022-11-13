@@ -39,7 +39,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "dataset1",
+						"referenceName": "ds_import_covid_zipped",
 						"type": "DatasetReference",
 						"parameters": {
 							"url": "https://raw.githubusercontent.com/seade-R/dados-covid-sp/master/data/casos_obitos_doencas_preexistentes.csv.zip"
@@ -48,7 +48,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dataset5",
+						"referenceName": "ds_unzipped_sink_covid_dataset",
 						"type": "DatasetReference"
 					}
 				]

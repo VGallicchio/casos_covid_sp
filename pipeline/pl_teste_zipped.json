@@ -38,7 +38,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "dataset1",
+						"referenceName": "ds_import_covid_zipped",
 						"type": "DatasetReference",
 						"parameters": {
 							"url": "https://www.saopaulo.sp.gov.br/wp-content/uploads/2022/11/20221112_Casos_e_obitos_ESP.zip"
@@ -103,7 +103,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dataset5",
+						"referenceName": "ds_unzipped_sink_covid_dataset",
 						"type": "DatasetReference"
 					}
 				]
@@ -154,13 +154,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "teste_import",
+						"referenceName": "ds_import_covid_dataset",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "sink_test",
+						"referenceName": "ds_sink_dataset",
 						"type": "DatasetReference",
 						"parameters": {
 							"path": "dados_covid_19_municipio",
