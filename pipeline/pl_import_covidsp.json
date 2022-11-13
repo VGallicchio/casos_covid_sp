@@ -77,16 +77,12 @@
 										"value": "csv",
 										"activities": [
 											{
-												"name": "Set variable1",
-												"type": "SetVariable",
+												"name": "Wait1",
+												"type": "Wait",
 												"dependsOn": [],
 												"userProperties": [],
 												"typeProperties": {
-													"variableName": "url",
-													"value": {
-														"value": "@concat('https://www.saopaulo.sp.gov.br/wp-content/uploads/',formatDateTime(utcnow(), 'yyyy'),'/',formatDateTime(utcnow(), 'MM'),'/',formatDateTime(utcnow(), 'yyyyMMdd'),'_',pipeline().parameters.name,'.',pipeline().parameters.format)",
-														"type": "Expression"
-													}
+													"waitTimeInSeconds": 1
 												}
 											}
 										]
@@ -95,65 +91,13 @@
 										"value": "zip",
 										"activities": [
 											{
-												"name": "Copy SP Covid Data_copy1",
-												"type": "Copy",
+												"name": "Wait2",
+												"type": "Wait",
 												"dependsOn": [],
-												"policy": {
-													"timeout": "7.00:00:00",
-													"retry": 0,
-													"retryIntervalInSeconds": 30,
-													"secureOutput": false,
-													"secureInput": false
-												},
 												"userProperties": [],
 												"typeProperties": {
-													"source": {
-														"type": "DelimitedTextSource",
-														"storeSettings": {
-															"type": "HttpReadSettings",
-															"requestMethod": "GET"
-														},
-														"formatSettings": {
-															"type": "DelimitedTextReadSettings"
-														}
-													},
-													"sink": {
-														"type": "DelimitedTextSink",
-														"storeSettings": {
-															"type": "AzureBlobFSWriteSettings"
-														},
-														"formatSettings": {
-															"type": "DelimitedTextWriteSettings",
-															"quoteAllText": true,
-															"fileExtension": ".txt"
-														}
-													},
-													"enableStaging": false,
-													"translator": {
-														"type": "TabularTranslator",
-														"typeConversion": true,
-														"typeConversionSettings": {
-															"allowDataTruncation": true,
-															"treatBooleanAsNumber": false
-														}
-													}
-												},
-												"inputs": [
-													{
-														"referenceName": "teste_import",
-														"type": "DatasetReference"
-													}
-												],
-												"outputs": [
-													{
-														"referenceName": "sink_test",
-														"type": "DatasetReference",
-														"parameters": {
-															"path": "dados_covid_19_municipio",
-															"fileName": "dados_covid_19.csv"
-														}
-													}
-												]
+													"waitTimeInSeconds": 1
+												}
 											}
 										]
 									}
