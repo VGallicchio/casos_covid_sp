@@ -313,7 +313,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"path": {
-											"value": "@concat('raw/',variables('processDate'),'/',variables('uuid'),item().dataset)",
+											"value": "@concat('raw/',item().dataset)",
 											"type": "Expression"
 										},
 										"fileName": {
