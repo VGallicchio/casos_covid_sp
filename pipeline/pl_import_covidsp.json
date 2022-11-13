@@ -42,7 +42,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup SP Gov Covid URL",
+						"activity": "Filter_atualizacao",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -51,7 +51,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup SP Gov Covid URL').output.value",
+						"value": "@activity('Filter_atualizacao').output.value",
 						"type": "Expression"
 					},
 					"activities": [
@@ -60,7 +60,13 @@
 							"type": "Switch",
 							"dependsOn": [
 								{
-									"activity": "Filter_atualizacao",
+									"activity": "uuid",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "processDate",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -77,13 +83,77 @@
 										"value": "csv",
 										"activities": [
 											{
-												"name": "Wait1",
-												"type": "Wait",
+												"name": "Copy_dataset",
+												"type": "Copy",
 												"dependsOn": [],
+												"policy": {
+													"timeout": "7.00:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
 												"userProperties": [],
 												"typeProperties": {
-													"waitTimeInSeconds": 1
-												}
+													"source": {
+														"type": "DelimitedTextSource",
+														"storeSettings": {
+															"type": "HttpReadSettings",
+															"requestMethod": "GET"
+														},
+														"formatSettings": {
+															"type": "DelimitedTextReadSettings"
+														}
+													},
+													"sink": {
+														"type": "DelimitedTextSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "DelimitedTextWriteSettings",
+															"quoteAllText": true,
+															"fileExtension": ".txt"
+														}
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_import_covid_dataset",
+														"type": "DatasetReference",
+														"parameters": {
+															"url": {
+																"value": "@concat(item().base,formatDateTime(utcnow(), 'yyyy'),'/',formatDateTime(utcnow(), 'MM'),'/',variables('processDate'),'_',item().source,'.',item().type)",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "ds_sink_dataset",
+														"type": "DatasetReference",
+														"parameters": {
+															"path": {
+																"value": "@concat(item().dataset,variables('processDate'),'/',variables('uuid'))",
+																"type": "Expression"
+															},
+															"fileName": {
+																"value": "@concat(item().dataset,'.csv')",
+																"type": "Expression"
+															}
+														}
+													}
+												]
 											}
 										]
 									},
@@ -91,13 +161,68 @@
 										"value": "zip",
 										"activities": [
 											{
-												"name": "Wait2",
-												"type": "Wait",
+												"name": "Copy_zipped_dataset",
+												"type": "Copy",
 												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
 												"userProperties": [],
 												"typeProperties": {
-													"waitTimeInSeconds": 1
-												}
+													"source": {
+														"type": "BinarySource",
+														"storeSettings": {
+															"type": "HttpReadSettings",
+															"requestMethod": "GET"
+														},
+														"formatSettings": {
+															"type": "BinaryReadSettings",
+															"compressionProperties": {
+																"type": "ZipDeflateReadSettings",
+																"preserveZipFileNameAsFolder": false
+															}
+														}
+													},
+													"sink": {
+														"type": "BinarySink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														}
+													},
+													"enableStaging": false
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_import_covid_zipped",
+														"type": "DatasetReference",
+														"parameters": {
+															"url": {
+																"value": "@concat(item().base,item().source,'.',item().type)",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "ds_unzipped_sink_covid_dataset",
+														"type": "DatasetReference",
+														"parameters": {
+															"path": {
+																"value": "@concat(item().dataset,'/',variables('processDate'),'/',variables('uuid'))",
+																"type": "Expression"
+															},
+															"fileName": {
+																"value": "@concat(item().dataset,'.csv')",
+																"type": "Expression"
+															}
+														}
+													}
+												]
 											}
 										]
 									}
@@ -105,17 +230,122 @@
 							}
 						},
 						{
-							"name": "Filter_atualizacao",
-							"type": "Filter",
+							"name": "Control_file",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Switch1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"additionalColumns": [
+										{
+											"name": "column1",
+											"value": {
+												"value": "@variables('processDate')",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "column2",
+											"value": {
+												"value": "@variables('uuid')",
+												"type": "Expression"
+											}
+										}
+									],
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_control_file",
+									"type": "DatasetReference",
+									"parameters": {
+										"path": "controlfile",
+										"fileName": "Control_interface_model.txt"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_control_file",
+									"type": "DatasetReference",
+									"parameters": {
+										"path": {
+											"value": "@concat('raw/',variables('processDate'),'/',variables('uuid'),item().dataset)",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@concat('Control_file_',item().dataset,'.txt')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "processDate",
+							"type": "SetVariable",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"items": {
-									"value": "@item()",
+								"variableName": "processDate",
+								"value": {
+									"value": "@formatDateTime(utcnow(), 'yyyyMMdd')",
 									"type": "Expression"
-								},
-								"condition": {
-									"value": "@contains(item().atualizcao, pipeline().parameters.periodo)",
+								}
+							}
+						},
+						{
+							"name": "uuid",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "uuid",
+								"value": {
+									"value": "@pipeline().GroupId",
 									"type": "Expression"
 								}
 							}
@@ -124,11 +354,11 @@
 				}
 			},
 			{
-				"name": "Execute pl_control_file",
-				"type": "ExecutePipeline",
+				"name": "Filter_atualizacao",
+				"type": "Filter",
 				"dependsOn": [
 					{
-						"activity": "ForEach ecdc file",
+						"activity": "Lookup SP Gov Covid URL",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -136,17 +366,34 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "pl_control_file",
-						"type": "PipelineReference"
+					"items": {
+						"value": "@activity('Lookup SP Gov Covid URL').output.value",
+						"type": "Expression"
 					},
-					"waitOnCompletion": true
+					"condition": {
+						"value": "@contains(item().Atualizacao, pipeline().parameters.periodo)",
+						"type": "Expression"
+					}
 				}
 			}
 		],
 		"parameters": {
 			"periodo": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"dataset": {
+				"type": "String"
+			},
+			"base": {
+				"type": "String"
+			},
+			"processDate": {
+				"type": "String"
+			},
+			"uuid": {
+				"type": "String"
 			}
 		},
 		"folder": {
