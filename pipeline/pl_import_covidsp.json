@@ -30,8 +30,8 @@
 						"referenceName": "ds_generico_json",
 						"type": "DatasetReference",
 						"parameters": {
-							"containerName": "configs",
-							"fileName": "spcoviddata.json"
+							"containerName": "metadata",
+							"fileName": "covidsource.json"
 						}
 					},
 					"firstRowOnly": false

@@ -22,7 +22,10 @@
 							"requestMethod": "GET"
 						},
 						"formatSettings": {
-							"type": "BinaryReadSettings"
+							"type": "BinaryReadSettings",
+							"compressionProperties": {
+								"type": "ZipDeflateReadSettings"
+							}
 						}
 					},
 					"sink": {
@@ -70,50 +73,37 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "DelimitedTextSource",
+						"type": "BinarySource",
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFileName": "*",
-							"enablePartitionDiscovery": false
+							"deleteFilesAfterCompletion": false
 						},
 						"formatSettings": {
-							"type": "DelimitedTextReadSettings",
+							"type": "BinaryReadSettings",
 							"compressionProperties": {
-								"type": "ZipDeflateReadSettings"
+								"type": "ZipDeflateReadSettings",
+								"preserveZipFileNameAsFolder": false
 							}
 						}
 					},
 					"sink": {
-						"type": "DelimitedTextSink",
+						"type": "BinarySink",
 						"storeSettings": {
 							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
 						}
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
+					"enableStaging": false
 				},
 				"inputs": [
 					{
-						"referenceName": "dataset4",
+						"referenceName": "dataset2",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "dataset3",
+						"referenceName": "dataset5",
 						"type": "DatasetReference"
 					}
 				]

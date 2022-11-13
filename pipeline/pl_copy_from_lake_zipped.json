@@ -18,11 +18,15 @@
 					"source": {
 						"type": "BinarySource",
 						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
 						},
 						"formatSettings": {
-							"type": "BinaryReadSettings"
+							"type": "BinaryReadSettings",
+							"compressionProperties": {
+								"type": "ZipDeflateReadSettings",
+								"preserveZipFileNameAsFolder": false
+							}
 						}
 					},
 					"sink": {
@@ -35,16 +39,16 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "zipped_bin",
+						"referenceName": "dataset1",
 						"type": "DatasetReference",
 						"parameters": {
-							"fileName": "7d2b4e47-4085-4b36-9c73-7be5a5c34331"
+							"url": "https://raw.githubusercontent.com/seade-R/dados-covid-sp/master/data/casos_obitos_doencas_preexistentes.csv.zip"
 						}
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "teste_copy_zipped",
+						"referenceName": "dataset5",
 						"type": "DatasetReference"
 					}
 				]
