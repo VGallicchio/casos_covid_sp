@@ -1,5 +1,5 @@
 {
-	"name": "dataset5",
+	"name": "ds_unzipped_sink_covid_dataset",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_estudo_de_caso_lake",
