@@ -6,9 +6,6 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"container": {
-				"type": "string"
-			},
 			"path": {
 				"type": "string"
 			},
