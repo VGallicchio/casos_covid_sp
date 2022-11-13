@@ -144,7 +144,7 @@
 														"type": "DatasetReference",
 														"parameters": {
 															"path": {
-																"value": "@concat(item().dataset,variables('processDate'),'/',variables('uuid'))",
+																"value": "@concat(item().dataset,'/',variables('processDate'),'/',variables('uuid'))",
 																"type": "Expression"
 															},
 															"fileName": {
