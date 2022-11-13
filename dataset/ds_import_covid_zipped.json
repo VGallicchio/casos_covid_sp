@@ -1,5 +1,5 @@
 {
-	"name": "dataset1",
+	"name": "ds_import_covid_zipped",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_dataset_covid_sp",
