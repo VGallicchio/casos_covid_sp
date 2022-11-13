@@ -56,85 +56,155 @@
 					},
 					"activities": [
 						{
-							"name": "Copy SP Covid Data",
-							"type": "Copy",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "7.00:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "DelimitedTextSource",
-									"storeSettings": {
-										"type": "HttpReadSettings",
-										"requestMethod": "GET"
-									},
-									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
-									}
-								},
-								"sink": {
-									"type": "DelimitedTextSink",
-									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings"
-									},
-									"formatSettings": {
-										"type": "DelimitedTextWriteSettings",
-										"quoteAllText": true,
-										"fileExtension": ".txt"
-									}
-								},
-								"enableStaging": false,
-								"translator": {
-									"type": "TabularTranslator",
-									"typeConversion": true,
-									"typeConversionSettings": {
-										"allowDataTruncation": true,
-										"treatBooleanAsNumber": false
-									}
-								}
-							},
-							"inputs": [
+							"name": "Switch1",
+							"type": "Switch",
+							"dependsOn": [
 								{
-									"referenceName": "ds_dataset_covidsp_import",
-									"type": "DatasetReference",
-									"parameters": {
-										"relativeURL": {
-											"value": "@item().sourceRelativeURL",
-											"type": "Expression"
-										},
-										"sourceBaseURL": {
-											"value": "@item().sourceBaseURL",
-											"type": "Expression"
-										},
-										"Delimiter": ";"
-									}
+									"activity": "Filter_atualizacao",
+									"dependencyConditions": [
+										"Succeeded"
+									]
 								}
 							],
-							"outputs": [
-								{
-									"referenceName": "ds_generico_csv",
-									"type": "DatasetReference",
-									"parameters": {
-										"ContainerName": "raw/covid-sp",
-										"FileName": {
-											"value": "@item().sinkFileName",
-											"type": "Expression"
-										},
-										"Delimiter": ";"
+							"userProperties": [],
+							"typeProperties": {
+								"on": {
+									"value": "@item().type",
+									"type": "Expression"
+								},
+								"cases": [
+									{
+										"value": "csv",
+										"activities": [
+											{
+												"name": "Set variable1",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "url",
+													"value": {
+														"value": "@concat('https://www.saopaulo.sp.gov.br/wp-content/uploads/',formatDateTime(utcnow(), 'yyyy'),'/',formatDateTime(utcnow(), 'MM'),'/',formatDateTime(utcnow(), 'yyyyMMdd'),'_',pipeline().parameters.name,'.',pipeline().parameters.format)",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"value": "zip",
+										"activities": [
+											{
+												"name": "Copy SP Covid Data_copy1",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "7.00:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "DelimitedTextSource",
+														"storeSettings": {
+															"type": "HttpReadSettings",
+															"requestMethod": "GET"
+														},
+														"formatSettings": {
+															"type": "DelimitedTextReadSettings"
+														}
+													},
+													"sink": {
+														"type": "DelimitedTextSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "DelimitedTextWriteSettings",
+															"quoteAllText": true,
+															"fileExtension": ".txt"
+														}
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "teste_import",
+														"type": "DatasetReference"
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "sink_test",
+														"type": "DatasetReference",
+														"parameters": {
+															"path": "dados_covid_19_municipio",
+															"fileName": "dados_covid_19.csv"
+														}
+													}
+												]
+											}
+										]
 									}
+								]
+							}
+						},
+						{
+							"name": "Filter_atualizacao",
+							"type": "Filter",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"items": {
+									"value": "@item()",
+									"type": "Expression"
+								},
+								"condition": {
+									"value": "@contains(item().atualizcao, pipeline().parameters.periodo)",
+									"type": "Expression"
 								}
-							]
+							}
 						}
 					]
 				}
+			},
+			{
+				"name": "Execute pl_control_file",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "ForEach ecdc file",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_control_file",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
+		"parameters": {
+			"periodo": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "covid-sp"
 		},
