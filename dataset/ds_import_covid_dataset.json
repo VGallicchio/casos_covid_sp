@@ -1,5 +1,5 @@
 {
-	"name": "teste_import",
+	"name": "ds_import_covid_dataset",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_dataset_covid_sp",
@@ -17,7 +17,7 @@
 			}
 		},
 		"folder": {
-			"name": "covid_sp"
+			"name": "estudo_de_caso_covid19"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
