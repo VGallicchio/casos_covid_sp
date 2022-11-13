@@ -1,5 +1,5 @@
 {
-	"name": "sink_test",
+	"name": "ds_sink_dataset",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_estudo_de_caso_lake",
