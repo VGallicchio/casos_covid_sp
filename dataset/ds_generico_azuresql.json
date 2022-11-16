@@ -1,10 +1,6 @@
 {
 	"name": "ds_generico_azuresql",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "ls_sqldatabase",
-			"type": "LinkedServiceReference"
-		},
 		"parameters": {
 			"SchemaName": {
 				"type": "string"
