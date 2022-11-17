@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-estudo-de-caso"
+		},
+		"DBW_EstudoDeCaso_accessToken": {
+			"value": ""
+		},
+		"ls_datalake_accountKey": {
+			"value": ""
+		},
+		"ls_estudo_de_caso_lake_accountKey": {
+			"value": ""
+		},
+		"DBW_EstudoDeCaso_properties_typeProperties_existingClusterId": {
+			"value": "1114-115020-w5xahlme"
+		},
+		"ls_datalake_properties_typeProperties_url": {
+			"value": "https://dlstudyvitor.dfs.core.windows.net"
+		},
+		"ls_dataset_covid_sp_properties_typeProperties_url": {
+			"value": "@{linkedService().baseURL}"
+		},
+		"ls_estudo_de_caso_lake_properties_typeProperties_url": {
+			"value": "https://estudodecasolake.dfs.core.windows.net/"
+		},
+		"ls_keyvault_properties_typeProperties_baseUrl": {
+			"value": "https://akv-studyvitor.vault.azure.net/"
+		}
+	}
+}
