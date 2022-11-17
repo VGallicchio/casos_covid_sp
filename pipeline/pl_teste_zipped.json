@@ -155,7 +155,13 @@
 				"inputs": [
 					{
 						"referenceName": "ds_import_covid_dataset",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"url": {
+								"value": "@pipeline().parameters.url",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
@@ -170,6 +176,11 @@
 				]
 			}
 		],
+		"parameters": {
+			"url": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "teste"
 		},
