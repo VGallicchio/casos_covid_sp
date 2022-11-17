@@ -104,7 +104,17 @@
 				"outputs": [
 					{
 						"referenceName": "ds_unzipped_sink_covid_dataset",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"path": {
+								"value": "@pipeline().parameters.path",
+								"type": "Expression"
+							},
+							"fileName": {
+								"value": "@pipeline().parameters.fileName",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			},
@@ -178,6 +188,12 @@
 		],
 		"parameters": {
 			"url": {
+				"type": "string"
+			},
+			"path": {
+				"type": "string"
+			},
+			"fileName": {
 				"type": "string"
 			}
 		},
