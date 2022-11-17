@@ -19,7 +19,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_generico_azuresql",
+						"referenceName": "ds_csv_iso_format_generico",
 						"type": "DatasetReference"
 					},
 					"name": "SinkDoses"
@@ -52,15 +52,13 @@
 				"     Total_Doses_Aplicadas = sum({Qtd Doses})) ~> AggDoses",
 				"AggDoses sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     truncate:true,",
-				"     format: 'table',",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> SinkDoses"
+				"     format: 'table') ~> SinkDoses"
 			]
 		}
 	}
