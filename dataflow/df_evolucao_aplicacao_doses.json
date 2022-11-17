@@ -16,10 +16,6 @@
 					"name": "EvolucaoDoses"
 				},
 				{
-					"dataset": {
-						"referenceName": "ds_generico_azuresql",
-						"type": "DatasetReference"
-					},
 					"name": "DosesDB"
 				}
 			],
@@ -52,11 +48,11 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     limit: 100,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> DosesDB",
+				"     limit: 100) ~> DosesDB",
 				"EvolucaoDoses, DosesDB join(EvolucaoDoses@Dose == DosesDB@Dose,",
 				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> JoinDoseID",
 				"JoinDoseID select(mapColumn(",
 				"          Data_Registro = {Dia de Data Registro},",

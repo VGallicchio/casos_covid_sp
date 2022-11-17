@@ -18,10 +18,6 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "ds_generico_azuresql",
-						"type": "DatasetReference"
-					},
 					"name": "SinkToDatabase"
 				}
 			],
@@ -58,15 +54,9 @@
 				"SelectColunas filter(Municipio != 'Ignorado' && not(isNull(Cod_IBGE))) ~> FiltraIgnorado",
 				"FiltraIgnorado sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     preSQLs:['TRUNCATE TABLE dbo.Municipios;'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> SinkToDatabase"
+				"     format: 'table') ~> SinkToDatabase"
 			]
 		}
 	}

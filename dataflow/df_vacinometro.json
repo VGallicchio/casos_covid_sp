@@ -22,10 +22,6 @@
 					"name": "Sample"
 				},
 				{
-					"dataset": {
-						"referenceName": "ds_generico_azuresql",
-						"type": "DatasetReference"
-					},
 					"name": "DosesDB"
 				}
 			],
@@ -71,12 +67,12 @@
 				"          Total_Doses_Aplicadas as integer",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> DosesDB",
+				"     validateSchema: false) ~> DosesDB",
 				"Vacinometro sort(asc({Município}, true)) ~> OrdenaAlfa",
 				"OrdenaAlfa, Sample join({Município} == Municipio,",
 				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> JoinCodMun",
 				"JoinCodMun select(mapColumn(",
 				"          Cod_IBGE,",
@@ -87,6 +83,8 @@
 				"     skipDuplicateMapOutputs: true) ~> SeleColunas",
 				"SeleColunas, DosesDB join(SeleColunas@Dose == DosesDB@Dose,",
 				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> JoinDosesID",
 				"JoinDosesID select(mapColumn(",
 				"          Cod_IBGE,",
