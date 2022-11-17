@@ -21,6 +21,12 @@
 					"secureInput": false
 				},
 				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": {
+						"value": "@activity('Transform').output",
+						"type": "Expression"
+					}
+				},
 				"linkedServiceName": {
 					"referenceName": "DBW_EstudoDeCaso",
 					"type": "LinkedServiceReference"
@@ -38,6 +44,12 @@
 					"secureInput": false
 				},
 				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": {
+						"value": "@pipeline().parameters.Notebook",
+						"type": "Expression"
+					}
+				},
 				"linkedServiceName": {
 					"referenceName": "DBW_EstudoDeCaso",
 					"type": "LinkedServiceReference"
