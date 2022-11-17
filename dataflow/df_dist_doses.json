@@ -26,7 +26,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_generico_azuresql",
+						"referenceName": "ds_csv_format_generico",
 						"type": "DatasetReference"
 					},
 					"name": "SinkQtdDoses"
@@ -63,6 +63,8 @@
 				"DistDoses sort(asc(Municipio, true)) ~> SortAlfabetico",
 				"SortAlfabetico, Sample join(DistDoses@Municipio == Sample@Municipio,",
 				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> JoinCodMun",
 				"JoinCodMun select(mapColumn(",
 				"          Cod_IBGE,",
@@ -72,18 +74,16 @@
 				"     skipDuplicateMapOutputs: true) ~> SelColunas",
 				"SelColunas sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
 				"          Cod_IBGE,",
 				"          Qtd_Doses_Distribuidas",
-				"     )) ~> SinkQtdDoses"
+				"     ),",
+				"     format: 'table') ~> SinkQtdDoses"
 			]
 		}
 	}
